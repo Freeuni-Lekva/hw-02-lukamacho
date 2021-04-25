@@ -1,6 +1,5 @@
 import junit.framework.TestCase;
 
-
 public class BoardTest extends TestCase {
 	Board b;
 	Piece pyr1, pyr2, pyr3, pyr4, s, sRotated;

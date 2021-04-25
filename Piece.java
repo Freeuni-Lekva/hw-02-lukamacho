@@ -33,13 +33,41 @@ public class Piece {
 	 Defines a new piece given a TPoint[] array of its body.
 	 Makes its own copy of the array and the TPoints inside it.
 	*/
-	public Piece(TPoint[] points) {
-		// YOUR CODE HERE
-	}
-	
 
-	
-	
+	public Piece(TPoint[] points) {
+		bodyWeightHeight(points);
+		skirtFilling();
+	}
+
+	private void skirtFilling() {
+		skirt = new int[width];
+		Arrays.fill(skirt, height);
+
+		for (int i=0;i<body.length;i++) {
+			TPoint curPoint = body[i];
+			if(skirt[curPoint.x] > curPoint.y){
+				skirt[curPoint.x] = curPoint.y;
+			}
+		}
+	}
+
+	private void bodyWeightHeight(TPoint [] points){
+		this.body = points;
+		int sigane=0;
+		int simagle=0;
+		for(int i=0;i<body.length;i++){
+			TPoint curPoint = body[i];
+			if(curPoint.x>=sigane){
+				sigane = curPoint.x + 1;
+			}
+			if(curPoint.y>=simagle){
+				simagle = curPoint.y + 1;
+			}
+		}
+		this.width=sigane;
+		this.height=simagle;
+	}
+
 	/**
 	 * Alternate constructor, takes a String with the x,y body points
 	 * all separated by spaces, such as "0 0  1 0  2 0	1 1".
@@ -87,8 +115,11 @@ public class Piece {
 	 rotated from the receiver.
 	 */
 	public Piece computeNextRotation() {
-		// YOUR CODE HERE
-		return null; // YOUR CODE HERE
+		TPoint [] rotatedBody = new TPoint [this.body.length];
+		for(int i=0;i<body.length;i++){
+			rotatedBody[i] = new TPoint(this.height - 1 - body[i].y,body[i].x);
+		}
+		return new Piece(rotatedBody); // YOUR CODE HERE
 	}
 
 	/**
@@ -119,8 +150,13 @@ public class Piece {
 		// (null will be false)
 		if (!(obj instanceof Piece)) return false;
 		Piece other = (Piece)obj;
-		
-		// YOUR CODE HERE
+
+		ArrayList<TPoint> first = new ArrayList<>(Arrays.asList(this.body));
+		ArrayList<TPoint> second = new ArrayList<>(Arrays.asList(other.getBody()));
+
+		if(!first.containsAll(second) || !second.containsAll(first)){
+			return false;
+		}
 		return true;
 	}
 
@@ -187,8 +223,18 @@ public class Piece {
 	 to the first piece.
 	*/
 	private static Piece makeFastRotations(Piece root) {
-		// YOUR CODE HERE
-		return null; // YOUR CODE HERE
+		Piece current = root;
+		Piece next = root.computeNextRotation();
+		while(true) {
+			if(next.equals(root)){
+				current.next = root;
+				break;
+			}
+			current.next = next;
+			current = next;
+			next = next.computeNextRotation();
+		}
+		return root;
 	}
 	
 	
