@@ -241,6 +241,7 @@ public class Board	{
 		for(int fromRow = 0;fromRow < height;fromRow++){
 			if(widths[fromRow] == width){
 				rowsCleared++;
+				continue;
 			}else if(rowsCleared > 0){
 				widths[toRow] = widths[fromRow];
 				for(int i = 0; i < width; i++){
@@ -264,8 +265,8 @@ public class Board	{
 			boolean exist = false;
 			for(int j=0;j<height;j++){
 				if(grid[i][j]){
-					exist=true;
-					break;
+					heights[i]=j+1;
+					exist = true;
 				}
 			}
 			if(!exist) {
